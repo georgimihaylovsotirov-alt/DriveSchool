@@ -1,0 +1,80 @@
+@inject DriveSchool.Services.DatabaseAvailability Database
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#10233c" />
+    <title>@ViewData["Title"] · DriveSchool</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body class="public-shell">
+    <header class="public-header">
+        <a class="brand" asp-controller="Home" asp-action="Index" aria-label="DriveSchool — начало">
+            <span class="brand-mark">D</span>
+            <span>drive<span class="brand-accent">school</span><small>Школа за уверени шофьори</small></span>
+        </a>
+        <nav class="public-nav" aria-label="Основна навигация">
+            <a asp-controller="Home" asp-action="Index">Начало</a>
+            <a asp-controller="Home" asp-action="About">За школата</a>
+            <a asp-controller="Home" asp-action="Training">Обучение</a>
+            <a asp-controller="Home" asp-action="Instructors">Инструктори</a>
+            <a asp-controller="Home" asp-action="Contact">Контакти</a>
+        </nav>
+        <div class="header-actions">
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                if (User.IsInRole(DriveSchool.Models.AppRoles.Owner))
+                {
+                    <a class="button button-light" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Към таблото</a>
+                }
+                else if (User.IsInRole(DriveSchool.Models.AppRoles.Instructor))
+                {
+                    <a class="button button-light" asp-area="Instructor" asp-controller="Dashboard" asp-action="Index">Към таблото</a>
+                }
+                else
+                {
+                    <a class="button button-light" asp-area="Student" asp-controller="Dashboard" asp-action="Index">Към таблото</a>
+                }
+            }
+            else
+            {
+                <a class="text-link" asp-controller="Account" asp-action="Login">Вход</a>
+                <a class="button button-primary" asp-controller="Account" asp-action="Register">Запиши се</a>
+            }
+        </div>
+    </header>
+    @if (!Database.IsConfigured)
+    {
+        <div class="database-notice" role="status">
+            Демо средата е без връзка с Microsoft SQL Server. Публичните страници са достъпни; входът и записването изискват настройка на базата данни.
+        </div>
+    }
+    <main>
+        @await Html.PartialAsync("_StatusMessages")
+        @RenderBody()
+    </main>
+    <footer class="public-footer">
+        <div class="footer-brand">
+            <a class="brand brand-inverse" asp-controller="Home" asp-action="Index">
+                <span class="brand-mark">D</span>
+                <span>drive<span class="brand-accent">school</span><small>Пътят започва с увереност.</small></span>
+            </a>
+            <p>Професионално обучение за безопасно и уверено шофиране.</p>
+        </div>
+        <div class="footer-links">
+            <a asp-controller="Home" asp-action="About">За нас</a>
+            <a asp-controller="Home" asp-action="Training">Категории</a>
+            <a asp-controller="Home" asp-action="Contact">Свържете се с нас</a>
+            <a asp-controller="Home" asp-action="Privacy">Поверителност</a>
+        </div>
+        <div class="footer-contact">
+            <span>Демо контактни данни</span>
+            <a asp-controller="Home" asp-action="Contact">Изпратете съобщение</a>
+            <span>Заменете данните на школата преди публикуване.</span>
+        </div>
+        <div class="footer-bottom">© @DateTime.Today.Year DriveSchool · Всички права запазени</div>
+    </footer>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

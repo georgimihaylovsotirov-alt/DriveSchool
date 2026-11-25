@@ -1,0 +1,21 @@
+@model IReadOnlyList<DriveSchool.Models.LessonBooking>
+@{
+    ViewData["Title"] = "Моят график";
+    var cars = ViewBag.Cars as IReadOnlyList<DriveSchool.Models.Car> ?? Array.Empty<DriveSchool.Models.Car>();
+}
+<div class="welcome-row"><div><span class="eyebrow">СВОБОДНИ ЧАСОВЕ И УРОЦИ</span><h2>Моят график</h2><p>Добавяйте свободни слотове и преглеждайте предстоящите занятия.</p></div></div>
+<section class="panel"><header class="panel-header"><div><h2>Добави свободен час</h2><p>Системата проверява застъпванията с други часове и автомобили.</p></div></header><div class="panel-body">
+<form asp-action="CreateSlot" method="post" class="inline-form">
+    <div class="form-field"><label for="StartsAt">Начало</label><input id="StartsAt" name="StartsAt" type="datetime-local" required /></div>
+    <div class="form-field"><label for="EndsAt">Край</label><input id="EndsAt" name="EndsAt" type="datetime-local" required /></div>
+    <div class="form-field"><label for="CarId">Автомобил</label><select id="CarId" name="CarId"><option value="">Без избран автомобил</option>@foreach (var car in cars) { <option value="@car.Id">@car.MakeModel · @car.RegistrationNumber</option> }</select></div>
+    <button class="button button-primary" type="submit">Добави слот</button>
+</form></div></section>
+<section class="panel"><header class="panel-header"><div><h2>Планирани занятия</h2><p>@Model.Count записа</p></div></header><div class="table-wrap"><table class="data-table"><thead><tr><th>Дата и час</th><th>Курсист</th><th>Автомобил</th><th>Статус</th></tr></thead><tbody>
+@foreach (var item in Model)
+{
+    var label = item.Status switch { DriveSchool.Models.BookingStatus.Available => "Свободен час", DriveSchool.Models.BookingStatus.Pending => "Чака потвърждение", DriveSchool.Models.BookingStatus.Confirmed => "Потвърден", DriveSchool.Models.BookingStatus.Rejected => "Отказан", DriveSchool.Models.BookingStatus.Cancelled => "Отменен", _ => "Проведен" };
+    <tr><td><strong>@item.StartsAt.ToString("dd MMM yyyy")</strong><br /><span class="muted">@item.StartsAt.ToString("HH:mm") – @item.EndsAt.ToString("HH:mm")</span></td><td>@(item.StudentProfile?.ApplicationUser.FullName ?? "Свободен слот")</td><td>@(item.Car?.MakeModel ?? "—")</td><td><span class="status status-@item.Status.ToString().ToLowerInvariant()">@label</span></td></tr>
+}
+@if (Model.Count == 0) { <tr><td colspan="4" class="table-empty">Графикът ви все още е празен.</td></tr> }
+</tbody></table></div></section>

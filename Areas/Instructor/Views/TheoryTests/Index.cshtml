@@ -1,0 +1,16 @@
+@model IReadOnlyList<DriveSchool.Models.TheoryTest>
+@{
+    ViewData["Title"] = "Теоретични тестове";
+}
+<div class="welcome-row"><div><span class="eyebrow">УЧЕБНО СЪДЪРЖАНИЕ</span><h2>Теоретични тестове</h2><p>Създавайте тестове и въпроси за подготовката на курсистите.</p></div><a class="button button-primary" asp-action="Create">＋ Нов тест</a></div>
+<section class="panel"><div class="table-wrap"><table class="data-table"><thead><tr><th>Тест</th><th>Категория</th><th>Въпроси</th><th>Време</th><th>Успех от</th><th>Статус</th><th></th></tr></thead><tbody>
+@foreach (var test in Model)
+{
+    <tr><td><strong>@test.Title</strong></td><td>@test.Category</td><td>@test.Questions.Count</td><td>@test.TimeLimitMinutes мин.</td><td>@test.PassingScore%</td><td><span class="status @(test.IsPublished ? "status-approved" : "status-cancelled")">@(test.IsPublished ? "Публикуван" : "Скрит")</span></td><td><div class="table-actions"><a class="table-link" asp-action="Edit" asp-route-id="@test.Id">Редакция</a><a class="table-link" asp-action="AddQuestion" asp-route-testId="@test.Id">Въпрос</a><form asp-action="TogglePublished" asp-route-id="@test.Id" method="post"><button class="table-link" type="submit">@(test.IsPublished ? "Скрий" : "Публикувай")</button></form></div></td></tr>
+    @foreach (var question in test.Questions)
+    {
+        <tr><td colspan="7"><span class="muted">↳ @question.Text</span></td></tr>
+    }
+}
+@if (Model.Count == 0) { <tr><td colspan="7" class="table-empty">Няма създадени теоретични тестове.</td></tr> }
+</tbody></table></div></section>

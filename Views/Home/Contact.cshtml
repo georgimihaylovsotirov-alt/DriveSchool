@@ -1,0 +1,25 @@
+@model DriveSchool.ViewModels.ContactViewModel
+@{
+    ViewData["Title"] = "Контакти";
+}
+<section class="page-hero">
+    <span class="eyebrow">СВЪРЖЕТЕ СЕ С НАС</span>
+    <h1>Нека поговорим за вашето обучение.</h1>
+    <p>Ще ви помогнем да изберете курс и ще отговорим на въпросите ви.</p>
+</section>
+<section class="section section-pad contact-grid">
+    <div class="contact-details">
+        <span class="eyebrow">DRIVESCHOOL · СОФИЯ</span>
+        <h2>Тук сме, когато имате нужда от нас.</h2>
+        <div class="contact-item"><span class="contact-symbol">✉</span><div><small>КОНТАКТ</small><span>Изпратете съобщение чрез формата.</span></div></div>
+        <div class="contact-item"><span class="contact-symbol">⌖</span><div><small>ЛОКАЦИЯ</small><span>Добавете адреса на школата.</span></div></div>
+        <div class="contact-hours"><strong>Важно за демо версията</strong><span>Посочените контактни данни трябва да бъдат заменени с реалните преди публикуване.</span></div>
+    </div>
+    <form class="form-card contact-form" asp-action="Contact" method="post">
+        <div><span class="eyebrow">ИЗПРАТЕТЕ НИ СЪОБЩЕНИЕ</span><h2>Как можем да помогнем?</h2></div>
+        <label asp-for="Name"></label><input asp-for="Name" autocomplete="name" /><span asp-validation-for="Name" class="field-error"></span>
+        <label asp-for="Email"></label><input asp-for="Email" autocomplete="email" /><span asp-validation-for="Email" class="field-error"></span>
+        <label asp-for="Message"></label><textarea asp-for="Message" rows="5"></textarea><span asp-validation-for="Message" class="field-error"></span>
+        <button class="button button-primary button-full" type="submit">Изпрати съобщението <span>→</span></button>
+    </form>
+</section>

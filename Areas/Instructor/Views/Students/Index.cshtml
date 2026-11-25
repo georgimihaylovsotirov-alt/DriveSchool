@@ -1,0 +1,12 @@
+@model IReadOnlyList<DriveSchool.Models.StudentProfile>
+@{
+    ViewData["Title"] = "Моите курсисти";
+}
+<div class="welcome-row"><div><span class="eyebrow">ВАШАТА ГРУПА</span><h2>Моите курсисти</h2><p>Достъпни са само курсистите, назначени към вашия профил.</p></div></div>
+<section class="panel"><div class="table-wrap"><table class="data-table"><thead><tr><th>Курсист</th><th>Категория</th><th>Напредък</th><th>Статус</th><th></th></tr></thead><tbody>
+@foreach (var student in Model)
+{
+    <tr><td><strong>@student.ApplicationUser.FullName</strong><br /><span class="muted">@student.ApplicationUser.Email</span></td><td>@student.LicenseCategory</td><td><div class="progress-track" style="width:100px"><span style="width:@student.ProgressPercent%"></span></div><small>@student.ProgressPercent%</small></td><td><span class="status @(student.IsActive ? "status-approved" : "status-rejected")">@(student.IsActive ? "Активен" : "Неактивен")</span></td><td><a class="table-link" asp-action="Details" asp-route-id="@student.Id">Профил и напредък</a></td></tr>
+}
+@if (Model.Count == 0) { <tr><td colspan="5" class="table-empty">Все още нямате назначени курсисти.</td></tr> }
+</tbody></table></div></section>

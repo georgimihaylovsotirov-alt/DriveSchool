@@ -1,0 +1,16 @@
+@model DriveSchool.ViewModels.CompleteLessonViewModel
+@{
+    ViewData["Title"] = "Оценка на урок";
+}
+<section class="panel"><header class="panel-header"><div><h2>Записване на резултат от урок</h2><p>@ViewBag.StudentName · @(((DateTime)ViewBag.StartsAt).ToString("dd MMM yyyy, HH:mm"))</p></div></header><div class="panel-body">
+<form asp-action="Complete" method="post" class="form-stack">
+    <input asp-for="BookingId" type="hidden" />
+    <div class="form-field"><label asp-for="Summary"></label><textarea asp-for="Summary" rows="4" placeholder="Кои умения упражнихте?"></textarea><span asp-validation-for="Summary" class="field-error"></span></div>
+    <div class="content-grid">
+        <div class="form-field"><label asp-for="VehicleControl"></label><select asp-for="VehicleControl"><option value="1">1 · Нуждае се от повече практика</option><option value="2">2 · В процес на усвояване</option><option value="3">3 · Добро ниво</option><option value="4">4 · Много добро ниво</option><option value="5">5 · Отлично ниво</option></select></div>
+        <div class="form-field"><label asp-for="RoadAwareness"></label><select asp-for="RoadAwareness"><option value="1">1 · Нуждае се от повече практика</option><option value="2">2 · В процес на усвояване</option><option value="3">3 · Добро ниво</option><option value="4">4 · Много добро ниво</option><option value="5">5 · Отлично ниво</option></select></div>
+        <div class="form-field"><label asp-for="Confidence"></label><select asp-for="Confidence"><option value="1">1 · Нуждае се от повече практика</option><option value="2">2 · В процес на усвояване</option><option value="3">3 · Добро ниво</option><option value="4">4 · Много добро ниво</option><option value="5">5 · Отлично ниво</option></select></div>
+    </div>
+    <div class="form-field"><label asp-for="Comment"></label><textarea asp-for="Comment" rows="3"></textarea></div>
+    <div class="form-actions"><button class="button button-primary" type="submit">Запиши оценката</button><a class="button button-light" asp-action="Index">Отказ</a></div>
+</form></div></section>

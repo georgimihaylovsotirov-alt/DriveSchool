@@ -1,0 +1,15 @@
+@model IReadOnlyList<DriveSchool.Models.LessonBooking>
+@{
+    ViewData["Title"] = "Заявки за час";
+}
+<div class="welcome-row"><div><span class="eyebrow">ИЗБОР НА ЧАС</span><h2>Заявки за урок</h2><p>Потвърдете часа или откажете заявката. При отказ слотът отново ще бъде наличен.</p></div></div>
+<section class="panel"><div class="table-wrap"><table class="data-table"><thead><tr><th>Курсист</th><th>Дата и час</th><th>Автомобил</th><th>Бележка</th><th>Решение</th></tr></thead><tbody>
+@foreach (var item in Model)
+{
+    <tr><td><strong>@item.StudentProfile?.ApplicationUser.FullName</strong></td><td>@item.StartsAt.ToString("dd MMM yyyy, HH:mm")</td><td>@(item.Car?.MakeModel ?? "—")</td><td>@(item.StudentNote ?? "—")</td><td><div class="table-actions">
+        <form asp-action="Review" method="post"><input type="hidden" name="id" value="@item.Id" /><input type="hidden" name="approve" value="true" /><button class="button button-primary button-small" type="submit">Потвърди</button></form>
+        <form asp-action="Review" method="post"><input type="hidden" name="id" value="@item.Id" /><input type="hidden" name="approve" value="false" /><button class="button button-light button-small" type="submit">Откажи</button></form>
+    </div></td></tr>
+}
+@if (Model.Count == 0) { <tr><td colspan="5" class="table-empty">Няма чакащи заявки.</td></tr> }
+</tbody></table></div></section>

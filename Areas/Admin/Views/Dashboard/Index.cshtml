@@ -1,0 +1,45 @@
+@using DriveSchool.Models
+@{
+    ViewData["Title"] = "Административно табло";
+}
+<div class="welcome-row">
+    <div><span class="eyebrow">ОБЗОР НА ШКОЛАТА</span><h2>Добре дошли в DriveSchool.</h2><p>Ето какво се случва в школата днес.</p></div>
+    <a class="button button-primary" asp-area="Admin" asp-controller="Enrollments" asp-action="Index">Преглед на заявките <span>→</span></a>
+</div>
+<div class="metrics-grid">
+    <article class="metric-card"><div class="metric-top"><span class="metric-label">Общо курсисти</span><span class="metric-icon">◉</span></div><strong class="metric-value">@ViewBag.TotalStudents</strong><div class="metric-sub">@ViewBag.ActiveStudents активни профила</div></article>
+    <article class="metric-card"><div class="metric-top"><span class="metric-label">Инструктори</span><span class="metric-icon">♙</span></div><strong class="metric-value">@ViewBag.TotalInstructors</strong><div class="metric-sub">активни в школата</div></article>
+    <article class="metric-card"><div class="metric-top"><span class="metric-label">Автомобили</span><span class="metric-icon">▰</span></div><strong class="metric-value">@ViewBag.AvailableCars</strong><div class="metric-sub">налични за обучение</div></article>
+    <article class="metric-card"><div class="metric-top"><span class="metric-label">Заявки за записване</span><span class="metric-icon">▤</span></div><strong class="metric-value">@ViewBag.PendingEnrollments</strong><div class="metric-sub">очакват преглед</div></article>
+    <article class="metric-card"><div class="metric-top"><span class="metric-label">Кандидатури за инструктор</span><span class="metric-icon">♙</span></div><strong class="metric-value">@ViewBag.PendingInstructorApplications</strong><div class="metric-sub"><a asp-area="Admin" asp-controller="Instructors" asp-action="Index">Преглед на кандидатурите →</a></div></article>
+</div>
+<div class="content-grid">
+    <section class="panel">
+        <header class="panel-header"><div><h2>Заявки за урок</h2><p>Последни чакащи потвърждение</p></div><a class="text-link" asp-area="Admin" asp-controller="Schedule" asp-action="Index">Целият график <span>→</span></a></header>
+        <div class="table-wrap"><table class="data-table"><thead><tr><th>Курсист</th><th>Инструктор</th><th>Час</th><th>Статус</th></tr></thead><tbody>
+        @if (((IReadOnlyCollection<LessonBooking>)ViewBag.PendingBookings).Count == 0)
+        {
+            <tr><td colspan="4" class="table-empty">Няма чакащи заявки за урок.</td></tr>
+        }
+        else
+        {
+            foreach (LessonBooking booking in ViewBag.PendingBookings)
+            {
+                <tr><td><strong>@booking.StudentProfile?.ApplicationUser.FullName</strong></td><td>@booking.InstructorProfile.ApplicationUser.FullName</td><td>@booking.StartsAt.ToString("dd MMM, HH:mm")</td><td><span class="status status-pending">Чака потвърждение</span></td></tr>
+            }
+        }
+        </tbody></table></div>
+    </section>
+    <section class="panel">
+        <header class="panel-header"><div><h2>Днес в школата</h2><p>Планирани занятия</p></div></header>
+        <div class="panel-body">
+            <div class="metric-value">@ViewBag.TodayLessons</div>
+            <div class="metric-sub">урока в графика за днес</div>
+            <div class="info-list" style="margin-top:20px">
+                <div class="info-row"><span>Постъпления този месец</span><strong>@(((decimal)ViewBag.MonthIncome).ToString("N2")) €.</strong></div>
+                <div class="info-row"><span>Активни курсисти</span><strong>@ViewBag.ActiveStudents</strong></div>
+                <div class="info-row"><span>Налични автомобили</span><strong>@ViewBag.AvailableCars</strong></div>
+            </div>
+        </div>
+    </section>
+</div>

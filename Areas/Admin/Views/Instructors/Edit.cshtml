@@ -1,0 +1,16 @@
+@model DriveSchool.ViewModels.InstructorEditViewModel
+@{
+    ViewData["Title"] = "Редакция на инструктор";
+}
+<section class="panel"><header class="panel-header"><div><h2>Данни на инструктора</h2><p>Неактивните инструктори не могат да влизат в системата.</p></div></header><div class="panel-body">
+<form asp-action="Edit" method="post" class="form-stack">
+    <input asp-for="Id" type="hidden" />
+    <div class="content-grid">
+        <div class="form-field"><label asp-for="FullName"></label><input asp-for="FullName" /><span asp-validation-for="FullName" class="field-error"></span></div>
+        <div class="form-field"><label asp-for="YearsExperience"></label><input asp-for="YearsExperience" type="number" min="0" max="60" /></div>
+        <div class="form-field"><label asp-for="Categories"></label><input asp-for="Categories" /></div>
+        <label class="checkbox-control"><input asp-for="IsActive" /> Активен профил</label>
+    </div>
+    <div class="form-field"><label asp-for="Bio"></label><textarea asp-for="Bio" rows="4"></textarea></div>
+    <div class="form-actions"><button class="button button-primary" type="submit">Запази промените</button><a class="button button-light" asp-action="Index">Назад</a></div>
+</form></div></section>

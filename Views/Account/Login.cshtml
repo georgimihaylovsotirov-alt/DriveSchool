@@ -1,0 +1,23 @@
+@model DriveSchool.ViewModels.LoginViewModel
+@{
+    ViewData["Title"] = "Вход";
+}
+<section class="auth-wrap">
+    <div class="auth-aside"><span class="eyebrow">РАДВАМЕ СЕ, ЧЕ СТЕ ТУК</span><h1>Продължете пътя си.</h1><p>Влезте в профила си, за да видите графика, уроците и своя напредък.</p><div class="auth-aside-note"><span>✓</span> Вашите данни и график са защитени.</div></div>
+    <form class="form-card auth-card" asp-action="Login" method="post">
+        <input asp-for="ReturnUrl" type="hidden" />
+        <span class="eyebrow">ВХОД В ПРОФИЛА</span><h2>Добре дошли.</h2><p class="muted">Въведете данните за своя профил.</p>
+        <div asp-validation-summary="ModelOnly" class="field-error"></div>
+        @if (TempData["Success"] is string successMessage)
+        {
+            <div class="alert alert-success">@successMessage</div>
+        }
+        <label asp-for="Email"></label><input asp-for="Email" autocomplete="username" />
+        <span asp-validation-for="Email" class="field-error"></span>
+        <label asp-for="Password"></label><input asp-for="Password" autocomplete="current-password" />
+        <span asp-validation-for="Password" class="field-error"></span>
+        <label class="checkbox-row"><input asp-for="RememberMe" /> <span>Запомни ме на това устройство</span></label>
+        <button class="button button-primary button-full" type="submit">Вход в профила <span>→</span></button>
+        <p class="auth-switch">Нямате профил? <a asp-action="Register">Създайте профил</a></p>
+    </form>
+</section>

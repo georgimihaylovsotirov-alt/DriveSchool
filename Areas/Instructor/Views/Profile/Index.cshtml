@@ -1,0 +1,11 @@
+@model DriveSchool.ViewModels.InstructorProfileViewModel
+@{
+    ViewData["Title"] = "Моят профил";
+}
+<section class="panel"><header class="panel-header"><div><h2>Моят профил</h2><p>Обновете името, телефона и представянето си.</p></div></header><div class="panel-body">
+<form asp-action="Index" method="post" class="form-stack">
+    <div class="form-field"><label asp-for="FullName"></label><input asp-for="FullName" /><span asp-validation-for="FullName" class="field-error"></span></div>
+    <div class="form-field"><label asp-for="PhoneNumber"></label><input asp-for="PhoneNumber" type="tel" /><span asp-validation-for="PhoneNumber" class="field-error"></span></div>
+    <div class="form-field"><label asp-for="Bio"></label><textarea asp-for="Bio" rows="5"></textarea><span asp-validation-for="Bio" class="field-error"></span></div>
+    <div class="form-actions"><button class="button button-primary" type="submit">Запази профила</button></div>
+</form></div></section>

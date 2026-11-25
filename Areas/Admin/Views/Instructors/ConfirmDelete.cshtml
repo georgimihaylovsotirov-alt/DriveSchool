@@ -1,0 +1,67 @@
+@model DriveSchool.Models.InstructorProfile
+
+@{
+    ViewData["Title"] = "Изтриване на инструктор";
+    var assignedStudents = (int)(ViewBag.AssignedStudents ?? 0);
+    var hasBookings = (bool)(ViewBag.HasBookings ?? false);
+    var canDelete = assignedStudents == 0 && !hasBookings;
+}
+
+<section class="panel confirm-panel">
+    <header class="panel-header">
+        <div>
+            <h2>Потвърждение за изтриване</h2>
+            <p>
+                @Model.ApplicationUser.FullName ·
+                @Model.ApplicationUser.Email
+            </p>
+        </div>
+    </header>
+
+    <div class="panel-body">
+        @if (canDelete)
+        {
+            <div class="notice-strip">
+                <strong>Внимание!</strong>
+                Сигурни ли сте, че искате да изтриете окончателно този инструктор?
+                Свободните му часове и известията ще бъдат премахнати.
+                Това действие не може да бъде отменено.
+            </div>
+
+            <form asp-action="Delete" method="post" class="form-actions">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="id" value="@Model.Id" />
+
+                <button class="button button-danger" type="submit">
+                    Изтрий акаунта окончателно
+                </button>
+
+                <a class="button button-light" asp-action="Index">
+                    Отказ
+                </a>
+            </form>
+        }
+        else
+        {
+            <div class="notice-strip">
+                <strong>Инструкторът не може да бъде изтрит.</strong>
+                <p>
+                    Назначени курсисти: @assignedStudents
+                </p>
+                <p>
+                    @(hasBookings
+                        ? "Има свързани заявки или история на уроци."
+                        : "Няма свързани заявки или история на уроци.")
+                </p>
+                Първо премахнете назначенията на курсистите и разрешете
+                свързаните уроци, след което опитайте отново.
+            </div>
+
+            <div class="form-actions">
+                <a class="button button-light" asp-action="Index">
+                    Назад към инструкторите
+                </a>
+            </div>
+        }
+    </div>
+</section>

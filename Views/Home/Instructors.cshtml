@@ -1,0 +1,27 @@
+@model IReadOnlyList<DriveSchool.Models.InstructorProfile>
+@{
+    ViewData["Title"] = "Нашите инструктори";
+}
+<section class="page-hero">
+    <span class="eyebrow">НАШИЯТ ЕКИП</span>
+    <h1>Спокойни инструктори. Уверени курсисти.</h1>
+    <p>Опитни професионалисти, които адаптират обучението към вашето темпо.</p>
+</section>
+<section class="section section-pad">
+    @if (Model.Count == 0)
+    {
+        <div class="empty-state"><span class="empty-icon">♙</span><h2>Информацията за екипа се подготвя.</h2><p>Свържете се с нас, за да научите повече за инструкторите и наличните часове.</p><a class="button button-dark" asp-controller="Home" asp-action="Contact">Контакти</a></div>
+    }
+    else
+    {
+        <div class="instructor-grid instructor-grid-large">
+            @foreach (var instructor in Model)
+            {
+                <article class="instructor-card">
+                    <div class="instructor-avatar">@instructor.ApplicationUser.FullName.Substring(0, 1)</div>
+                    <div><h2>@instructor.ApplicationUser.FullName</h2><p>@instructor.YearsExperience години опит · Категории @instructor.Categories</p><span>@instructor.Bio</span></div>
+                </article>
+            }
+        </div>
+    }
+</section>

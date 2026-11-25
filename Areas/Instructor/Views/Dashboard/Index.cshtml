@@ -1,0 +1,23 @@
+@model DriveSchool.Models.InstructorProfile
+@using DriveSchool.Models
+@{
+    ViewData["Title"] = "Инструкторско табло";
+}
+<div class="welcome-row"><div><span class="eyebrow">ЛИЧЕН ПРЕГЛЕД</span><h2>Здравейте, @Model.ApplicationUser.FullName.</h2><p>Ето планираните задачи и занятия за днес.</p></div><a class="button button-primary" asp-area="Instructor" asp-controller="Schedule" asp-action="Index">Управлявай графика <span>→</span></a></div>
+<div class="metrics-grid">
+    <article class="metric-card"><div class="metric-top"><span class="metric-label">Назначени курсисти</span><span class="metric-icon">◉</span></div><strong class="metric-value">@ViewBag.StudentCount</strong><div class="metric-sub">във вашата група</div></article>
+    <article class="metric-card"><div class="metric-top"><span class="metric-label">Уроци днес</span><span class="metric-icon">▦</span></div><strong class="metric-value">@ViewBag.TodayCount</strong><div class="metric-sub">планирани и проведени</div></article>
+    <article class="metric-card"><div class="metric-top"><span class="metric-label">Проведени уроци</span><span class="metric-icon">✓</span></div><strong class="metric-value">@ViewBag.CompletedCount</strong><div class="metric-sub">в обучението на курсистите</div></article>
+    <article class="metric-card"><div class="metric-top"><span class="metric-label">Заявки за час</span><span class="metric-icon">▤</span></div><strong class="metric-value">@ViewBag.PendingCount</strong><div class="metric-sub">очакват решение</div></article>
+</div>
+<section class="panel">
+    <header class="panel-header"><div><h2>Днешен график</h2><p>Планирани занятия и заявки</p></div><a class="text-link" asp-area="Instructor" asp-controller="BookingRequests" asp-action="Index">Всички заявки <span>→</span></a></header>
+    <div class="table-wrap"><table class="data-table"><thead><tr><th>Час</th><th>Курсист</th><th>Автомобил</th><th>Статус</th></tr></thead><tbody>
+    @foreach (LessonBooking item in ViewBag.Today)
+    {
+        var label = item.Status == BookingStatus.Pending ? "Чака потвърждение" : item.Status == BookingStatus.Confirmed ? "Потвърден" : item.Status == BookingStatus.Completed ? "Проведен" : "Свободен";
+        <tr><td><strong>@item.StartsAt.ToString("HH:mm") – @item.EndsAt.ToString("HH:mm")</strong></td><td>@(item.StudentProfile?.ApplicationUser.FullName ?? "Свободен час")</td><td>@(item.Car?.MakeModel ?? "—")</td><td><span class="status status-@item.Status.ToString().ToLowerInvariant()">@label</span></td></tr>
+    }
+    @if (((IReadOnlyCollection<LessonBooking>)ViewBag.Today).Count == 0) { <tr><td colspan="4" class="table-empty">Нямате планирани занятия за днес.</td></tr> }
+    </tbody></table></div>
+</section>

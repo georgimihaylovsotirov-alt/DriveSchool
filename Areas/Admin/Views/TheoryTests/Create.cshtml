@@ -1,0 +1,15 @@
+@model DriveSchool.ViewModels.TheoryTestCreateViewModel
+@{
+    ViewData["Title"] = "Нов тест";
+}
+<section class="panel"><header class="panel-header"><div><h2>Създаване на тест</h2><p>След създаване добавете въпроси с четири отговора.</p></div></header><div class="panel-body">
+<form asp-action="Create" method="post" class="form-stack">
+    <div class="form-field"><label asp-for="Title"></label><input asp-for="Title" /><span asp-validation-for="Title" class="field-error"></span></div>
+    <div class="content-grid">
+        <div class="form-field"><label asp-for="Category"></label><select asp-for="Category" asp-items="Html.GetEnumSelectList<DriveSchool.Models.TestCategory>()"></select></div>
+        <div class="form-field"><label asp-for="TimeLimitMinutes"></label><input asp-for="TimeLimitMinutes" type="number" min="1" max="180" /></div>
+        <div class="form-field"><label asp-for="PassingScore"></label><input asp-for="PassingScore" type="number" min="1" max="100" /></div>
+    </div>
+    <div class="notice-strip">Тестът ще остане скрит, докато не добавите въпрос и не го публикувате.</div>
+    <div class="form-actions"><button class="button button-primary" type="submit">Създай тест</button><a class="button button-light" asp-action="Index">Отказ</a></div>
+</form></div></section>

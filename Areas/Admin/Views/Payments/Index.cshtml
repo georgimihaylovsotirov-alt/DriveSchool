@@ -1,0 +1,16 @@
+@model IReadOnlyList<DriveSchool.Models.Payment>
+@{
+    ViewData["Title"] = "Плащания";
+}
+<div class="welcome-row"><div><span class="eyebrow">ФИНАНСОВИ ЗАПИСИ</span><h2>Плащания</h2><p>Следете задълженията и отчетените плащания.</p></div><a class="button button-primary" asp-action="Create">＋ Ново задължение</a></div>
+<section class="panel"><div class="table-wrap"><table class="data-table"><thead><tr><th>Курсист</th><th>Основание</th><th>Падеж</th><th>Сума</th><th>Статус</th><th></th></tr></thead><tbody>
+@foreach (var item in Model)
+{
+    var statusLabel = item.Status switch { DriveSchool.Models.PaymentStatus.Paid => "Платено", DriveSchool.Models.PaymentStatus.Overdue => "Просрочено", _ => "Очаква се" };
+    <tr><td><strong>@item.StudentProfile.ApplicationUser.FullName</strong></td><td>@item.Description</td><td>@item.DueAt.ToString("dd MMM yyyy")</td><td><strong>@item.Amount.ToString("N2") @item.Currency</strong></td><td><span class="status status-@item.Status.ToString().ToLowerInvariant()">@statusLabel</span></td><td>
+        @if (item.Status != DriveSchool.Models.PaymentStatus.Paid) { <form asp-action="MarkPaid" asp-route-id="@item.Id" method="post"><button class="table-link" type="submit">Отбележи платено</button></form> }
+        else { <span class="muted">@(item.PaidAt?.ToString("dd MMM yyyy"))</span> }
+    </td></tr>
+}
+@if (Model.Count == 0) { <tr><td colspan="6" class="table-empty">Няма финансови записи.</td></tr> }
+</tbody></table></div></section>

@@ -1,0 +1,98 @@
+@inject DriveSchool.Services.DatabaseAvailability Database
+@{
+    var owner = User.IsInRole(DriveSchool.Models.AppRoles.Owner);
+    var instructor = User.IsInRole(DriveSchool.Models.AppRoles.Instructor);
+    var area = owner ? "Admin" : instructor ? "Instructor" : "Student";
+    var brandTitle = owner ? "Администрация" : instructor ? "Инструкторски профил" : "Курсистки профил";
+}
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#10233c" />
+    <title>@ViewData["Title"] · DriveSchool</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body class="workspace-shell">
+    <aside class="sidebar">
+        <a class="brand brand-inverse sidebar-brand" asp-area="@area" asp-controller="Dashboard" asp-action="Index">
+            <span class="brand-mark">D</span>
+            <span>drive<span class="brand-accent">school</span><small>@brandTitle</small></span>
+        </a>
+        <div class="sidebar-label">РАБОТНО ПРОСТРАНСТВО</div>
+        <nav class="sidebar-nav" aria-label="Навигация">
+            @if (owner)
+            {
+                <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index"><span>⌂</span> Табло</a>
+                <a asp-area="Admin" asp-controller="Students" asp-action="Index"><span>◉</span> Курсисти</a>
+                <a asp-area="Admin" asp-controller="Instructors" asp-action="Index"><span>♙</span> Инструктори</a>
+                <a asp-area="Admin" asp-controller="Cars" asp-action="Index"><span>▰</span> Автомобили</a>
+                <a asp-area="Admin" asp-controller="Enrollments" asp-action="Index"><span>▤</span> Записвания</a>
+                <a asp-area="Admin" asp-controller="Schedule" asp-action="Index"><span>▦</span> График</a>
+                <a asp-area="Admin" asp-controller="Lessons" asp-action="Index"><span>✓</span> Проведени уроци</a>
+                <a asp-area="Admin" asp-controller="Payments" asp-action="Index"><span>€</span> Плащания</a>
+                <a asp-area="Admin" asp-controller="Statistics" asp-action="Index"><span>▥</span> Статистика</a>
+                <a asp-area="Admin" asp-controller="TheoryTests" asp-action="Index"><span>?</span> Теория</a>
+                <a asp-area="Admin" asp-controller="Settings" asp-action="Index"><span>⚙</span> Профили</a>
+            }
+            else if (instructor)
+            {
+                <a asp-area="Instructor" asp-controller="Dashboard" asp-action="Index"><span>⌂</span> Табло</a>
+                <a asp-area="Instructor" asp-controller="Students" asp-action="Index"><span>◉</span> Моите курсисти</a>
+                <a asp-area="Instructor" asp-controller="Schedule" asp-action="Index"><span>▦</span> Моят график</a>
+                <a asp-area="Instructor" asp-controller="BookingRequests" asp-action="Index"><span>▤</span> Заявки за час</a>
+                <a asp-area="Instructor" asp-controller="Lessons" asp-action="Index"><span>✓</span> Уроци и оценки</a>
+                <a asp-area="Instructor" asp-controller="TheoryTests" asp-action="Index"><span>?</span> Теория</a>
+                <a asp-area="Instructor" asp-controller="Profile" asp-action="Index"><span>♙</span> Моят профил</a>
+            }
+            else
+            {
+                <a asp-area="Student" asp-controller="Dashboard" asp-action="Index"><span>⌂</span> Табло</a>
+                <a asp-area="Student" asp-controller="Dashboard" asp-action="MyInstructor"><span>♙</span> Моят инструктор</a>
+                <a asp-area="Student" asp-controller="Dashboard" asp-action="Book"><span>＋</span> Запази урок</a>
+                <a asp-area="Student" asp-controller="Dashboard" asp-action="Schedule"><span>▦</span> Моят график</a>
+                <a asp-area="Student" asp-controller="Dashboard" asp-action="Lessons"><span>✓</span> Моите уроци</a>
+                <a asp-area="Student" asp-controller="Dashboard" asp-action="Progress"><span>◌</span> Напредък</a>
+                <a asp-area="Student" asp-controller="Dashboard" asp-action="TheoryTests"><span>?</span> Теоретични тестове</a>
+                <a asp-area="Student" asp-controller="Dashboard" asp-action="Payments"><span>€</span> Плащания</a>
+                <a asp-area="Student" asp-controller="Dashboard" asp-action="Profile"><span>♙</span> Моят профил</a>
+            }
+        </nav>
+        <div class="sidebar-help">
+            <span class="help-icon">i</span>
+            <strong>Нужда от помощ?</strong>
+            <span>Нашият екип е насреща.</span>
+            <a asp-controller="Home" asp-action="Contact">Форма за контакт</a>
+        </div>
+        <a class="sidebar-home" asp-controller="Home" asp-action="Index">← Към публичния сайт</a>
+    </aside>
+    <div class="workspace-main">
+        <header class="workspace-header">
+            <div>
+                <div class="eyebrow">@brandTitle</div>
+                <h1>@ViewData["Title"]</h1>
+            </div>
+            <div class="user-actions">
+                <div class="user-badge">
+                    <span class="avatar">@((User.Identity?.Name ?? "П").Substring(0, 1).ToUpperInvariant())</span>
+                    <span><strong>@User.Identity?.Name</strong><small>@brandTitle</small></span>
+                </div>
+                <form asp-area="" asp-controller="Account" asp-action="Logout" method="post">
+                    <button class="button button-light button-small" type="submit">Изход</button>
+                </form>
+            </div>
+        </header>
+        @if (!Database.IsConfigured)
+        {
+            <div class="database-notice database-notice-workspace" role="status">
+                Microsoft SQL Server не е конфигуриран. Добавете SQLSERVER_CONNECTION_STRING, за да използвате данните и функциите на профила.
+            </div>
+        }
+        <main class="workspace-content">
+            @await Html.PartialAsync("_StatusMessages")
+            @RenderBody()
+        </main>
+    </div>
+</body>
+</html>

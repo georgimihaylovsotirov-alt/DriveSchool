@@ -1,0 +1,33 @@
+@model IReadOnlyList<DriveSchool.Models.Enrollment>
+@{
+    ViewData["Title"] = "Заявки за записване";
+    var instructors = ViewBag.Instructors as IReadOnlyList<DriveSchool.Models.InstructorProfile> ?? Array.Empty<DriveSchool.Models.InstructorProfile>();
+}
+<div class="welcome-row"><div><span class="eyebrow">ПРИЕМ НА КУРСИСТИ</span><h2>Заявки за записване</h2><p>Прегледайте новите заявки и назначете инструктор.</p></div></div>
+<section class="panel">
+    <div class="table-wrap"><table class="data-table"><thead><tr><th>Курсист</th><th>Категория</th><th>Дата</th><th>Статус</th><th>Обработка</th></tr></thead><tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td><strong>@item.StudentProfile.ApplicationUser.FullName</strong><br /><span class="muted">@item.StudentProfile.ApplicationUser.Email</span></td>
+            <td>@item.RequestedCategory</td><td>@item.CreatedAt.ToString("dd MMM yyyy")</td>
+            <td><span class="status status-@item.Status.ToString().ToLowerInvariant()">@(
+                item.Status == DriveSchool.Models.EnrollmentStatus.Pending ? "Чака преглед" :
+                item.Status == DriveSchool.Models.EnrollmentStatus.Approved ? "Одобрена" : "Отказана")</span></td>
+            <td>
+                @if (item.Status == DriveSchool.Models.EnrollmentStatus.Pending)
+                {
+                    <form asp-action="Review" method="post" class="inline-form">
+                        <input type="hidden" name="Id" value="@item.Id" />
+                        <select name="InstructorProfileId" aria-label="Инструктор"><option value="">Изберете инструктор</option>@foreach (var instructor in instructors) { <option value="@instructor.Id">@instructor.ApplicationUser.FullName</option> }</select>
+                        <button class="button button-primary button-small" name="Status" value="Approved" type="submit">Одобри</button>
+                        <button class="button button-light button-small" name="Status" value="Rejected" type="submit">Откажи</button>
+                    </form>
+                }
+                else { <span class="muted">Обработена</span> }
+            </td>
+        </tr>
+    }
+    @if (Model.Count == 0) { <tr><td colspan="5" class="table-empty">Няма заявки за записване.</td></tr> }
+    </tbody></table></div>
+</section>

@@ -1,0 +1,14 @@
+@model IReadOnlyList<(DriveSchool.Models.ApplicationUser User, IList<string> Roles)>
+@{
+    ViewData["Title"] = "Потребителски профили";
+}
+<div class="welcome-row"><div><span class="eyebrow">ДОСТЪП И РОЛИ</span><h2>Потребителски профили</h2><p>Блокирайте достъпа при необходимост. Историята на обучението се запазва.</p></div></div>
+<section class="panel"><div class="table-wrap"><table class="data-table"><thead><tr><th>Профил</th><th>Роля</th><th>Статус</th><th>Действие</th></tr></thead><tbody>
+@foreach (var account in Model)
+{
+    var isLocked = account.User.LockoutEnd.HasValue && account.User.LockoutEnd > DateTimeOffset.UtcNow;
+    <tr><td><strong>@account.User.FullName</strong><br /><span class="muted">@account.User.Email</span></td><td>@string.Join(", ", account.Roles)</td><td><span class="status @(isLocked ? "status-rejected" : "status-approved")">@(isLocked ? "Блокиран" : "Активен")</span></td><td>
+        <form asp-action="ToggleLock" method="post"><input type="hidden" name="id" value="@account.User.Id" /><button class="table-link" type="submit">@(isLocked ? "Отключи" : "Блокирай")</button></form>
+    </td></tr>
+}
+</tbody></table></div></section>

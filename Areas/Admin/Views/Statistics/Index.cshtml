@@ -1,0 +1,16 @@
+@{
+    ViewData["Title"] = "Статистика";
+}
+<div class="welcome-row"><div><span class="eyebrow">ИЗМЕРВАНЕ НА НАПРЕДЪКА</span><h2>Статистика</h2><p>Обобщение на обучението и събраните плащания за последните шест месеца.</p></div></div>
+<div class="metrics-grid">
+    <article class="metric-card"><div class="metric-top"><span class="metric-label">Активни курсисти</span><span class="metric-icon">◉</span></div><strong class="metric-value">@ViewBag.TotalStudents</strong><div class="metric-sub">в момента в школата</div></article>
+    <article class="metric-card"><div class="metric-top"><span class="metric-label">Успеваемост на тестовете</span><span class="metric-icon">✓</span></div><strong class="metric-value">@ViewBag.PassRate%</strong><div class="metric-sub">положителни резултати</div></article>
+    <article class="metric-card"><div class="metric-top"><span class="metric-label">Неплатени задължения</span><span class="metric-icon">€</span></div><strong class="metric-value">@(((decimal)ViewBag.Outstanding).ToString("N0")) €.</strong><div class="metric-sub">текущ остатък</div></article>
+</div>
+<section class="panel"><header class="panel-header"><div><h2>Уроци и постъпления</h2><p>Месечна справка</p></div></header><div class="panel-body chart-bars">
+@foreach (var month in ViewBag.Months)
+{
+    <div class="chart-row"><strong>@month.Label</strong><div class="chart-bar-track" aria-label="Проведени уроци"><div class="chart-bar" style="width:@Math.Min(100, month.Lessons * 5)%"></div></div><span class="chart-value">@month.Lessons урока</span></div>
+    <div class="chart-row"><span class="muted">Постъпления</span><div class="chart-bar-track"><div class="chart-bar" style="width:@Math.Min(100, (double)month.Revenue / 30)%"></div></div><span class="chart-value">@(((decimal)month.Revenue).ToString("N0")) €.</span></div>
+}
+</div></section>

@@ -1,0 +1,15 @@
+@model DriveSchool.Models.Car
+@{
+    ViewData["Title"] = "Премахване на автомобил";
+}
+<section class="panel confirm-panel">
+    <header class="panel-header"><div><h2>Потвърждение за автомобил</h2><p>@Model.MakeModel · @Model.RegistrationNumber</p></div></header>
+    <div class="panel-body">
+        <div class="notice-strip">Автомобилът ще бъде премахнат от автопарка. Историята на уроците се запазва, но вече няма да сочи към него.</div>
+        <form asp-action="Delete" method="post" class="form-actions">
+            <input type="hidden" name="id" value="@Model.Id" />
+            <button class="button button-danger" type="submit">Премахни автомобила</button>
+            <a class="button button-light" asp-action="Index">Отказ</a>
+        </form>
+    </div>
+</section>

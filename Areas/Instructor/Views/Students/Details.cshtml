@@ -1,0 +1,18 @@
+@model DriveSchool.Models.StudentProfile
+@{
+    ViewData["Title"] = "Профил на курсист";
+}
+<div class="welcome-row"><div><span class="eyebrow">КУРСИСТ · @Model.LicenseCategory</span><h2>@Model.ApplicationUser.FullName</h2><p>@Model.ApplicationUser.Email</p></div><a class="button button-light" asp-action="Index">Назад към списъка</a></div>
+<div class="content-grid">
+    <section class="panel"><header class="panel-header"><div><h2>Напредък в обучението</h2><p>Резултати от проведените уроци</p></div></header><div class="panel-body">
+        <div class="progress-caption"><strong>Общо напредък</strong><strong>@Model.ProgressPercent%</strong></div><div class="progress-track"><span style="width:@Model.ProgressPercent%"></span></div>
+        <div class="info-list" style="margin-top:16px"><div class="info-row"><span>Завършени уроци</span><strong>@Model.Bookings.Count</strong></div><div class="info-row"><span>Резултати от тестове</span><strong>@Model.TestResults.Count</strong></div></div>
+    </div></section>
+    <section class="panel"><header class="panel-header"><div><h2>Теоретични тестове</h2></div></header><div class="panel-body">
+        @foreach (var result in Model.TestResults.OrderByDescending(item => item.TakenAt).Take(5))
+        {
+            <div class="info-row"><span>@result.TheoryTest.Title</span><strong>@result.Score% · @(result.Passed ? "Успешен" : "За повторение")</strong></div>
+        }
+        @if (Model.TestResults.Count == 0) { <p class="muted">Няма резултати от тестове.</p> }
+    </div></section>
+</div>

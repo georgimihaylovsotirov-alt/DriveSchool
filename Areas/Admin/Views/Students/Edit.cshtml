@@ -1,0 +1,20 @@
+@model DriveSchool.ViewModels.StudentEditViewModel
+@{
+    ViewData["Title"] = "Редакция на курсист";
+    var instructors = ViewBag.Instructors as IReadOnlyList<DriveSchool.Models.InstructorProfile> ?? Array.Empty<DriveSchool.Models.InstructorProfile>();
+}
+<section class="panel">
+    <header class="panel-header"><div><h2>Редакция на профил</h2><p>Промяната на назначен инструктор се прилага веднага.</p></div></header>
+    <div class="panel-body">
+        <form asp-action="Edit" method="post" class="form-stack">
+            <div asp-validation-summary="ModelOnly" class="field-error"></div>
+            <input asp-for="Id" type="hidden" />
+            <div class="form-field"><label asp-for="FullName"></label><input asp-for="FullName" /><span asp-validation-for="FullName" class="field-error"></span></div>
+            <div class="form-field"><label asp-for="LicenseCategory"></label><select asp-for="LicenseCategory"><option value="B">B · лек автомобил</option><option value="A">A · мотоциклет</option><option value="C">C · товарен автомобил</option><option value="D">D · автобус</option></select></div>
+            <div class="form-field"><label asp-for="ProgressPercent"></label><input asp-for="ProgressPercent" type="number" min="0" max="100" /><span asp-validation-for="ProgressPercent" class="field-error"></span></div>
+            <div class="form-field"><label asp-for="InstructorProfileId"></label><select asp-for="InstructorProfileId"><option value="">Без назначение</option>@foreach (var instructor in instructors) { <option value="@instructor.Id">@instructor.ApplicationUser.FullName</option> }</select><span asp-validation-for="InstructorProfileId" class="field-error"></span></div>
+            <label class="checkbox-control"><input asp-for="IsActive" /> Активен профил</label>
+            <div class="form-actions"><button class="button button-primary" type="submit">Запази промените</button><a class="button button-light" asp-action="Index">Назад</a></div>
+        </form>
+    </div>
+</section>

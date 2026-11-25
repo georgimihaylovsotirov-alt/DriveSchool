@@ -1,0 +1,17 @@
+@model DriveSchool.ViewModels.TheoryQuestionCreateViewModel
+@{
+    ViewData["Title"] = "Добавяне на въпрос";
+}
+<section class="panel"><header class="panel-header"><div><h2>@ViewBag.TestTitle</h2><p>Добавете въпрос и посочете един верен отговор.</p></div></header><div class="panel-body">
+<form asp-action="AddQuestion" method="post" class="form-stack">
+    <input asp-for="TheoryTestId" type="hidden" />
+    <div class="form-field"><label asp-for="Text"></label><textarea asp-for="Text" rows="3"></textarea><span asp-validation-for="Text" class="field-error"></span></div>
+    <div class="content-grid">
+        <div class="form-field"><label asp-for="Answer1"></label><input asp-for="Answer1" /><span asp-validation-for="Answer1" class="field-error"></span></div>
+        <div class="form-field"><label asp-for="Answer2"></label><input asp-for="Answer2" /><span asp-validation-for="Answer2" class="field-error"></span></div>
+        <div class="form-field"><label asp-for="Answer3"></label><input asp-for="Answer3" /><span asp-validation-for="Answer3" class="field-error"></span></div>
+        <div class="form-field"><label asp-for="Answer4"></label><input asp-for="Answer4" /><span asp-validation-for="Answer4" class="field-error"></span></div>
+    </div>
+    <div class="form-field"><label asp-for="CorrectAnswer"></label><select asp-for="CorrectAnswer"><option value="1">Отговор 1</option><option value="2">Отговор 2</option><option value="3">Отговор 3</option><option value="4">Отговор 4</option></select></div>
+    <div class="form-actions"><button class="button button-primary" type="submit">Добави въпроса</button><a class="button button-light" asp-action="Index">Назад</a></div>
+</form></div></section>

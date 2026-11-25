@@ -1,0 +1,18 @@
+@model DriveSchool.ViewModels.StudentCreateViewModel
+@{
+    ViewData["Title"] = "Нов курсист";
+    var instructors = ViewBag.Instructors as IReadOnlyList<DriveSchool.Models.InstructorProfile> ?? Array.Empty<DriveSchool.Models.InstructorProfile>();
+}
+<section class="panel">
+    <header class="panel-header"><div><h2>Създаване на профил</h2><p>Новият курсист ще получи роля „Курсист“ и чакаща заявка за обучение.</p></div></header>
+    <div class="panel-body">
+        <form asp-action="Create" method="post" class="form-stack">
+            <div class="form-field"><label asp-for="FullName"></label><input asp-for="FullName" /><span asp-validation-for="FullName" class="field-error"></span></div>
+            <div class="form-field"><label asp-for="Email"></label><input asp-for="Email" /><span asp-validation-for="Email" class="field-error"></span></div>
+            <div class="form-field"><label asp-for="Password"></label><input asp-for="Password" /><span asp-validation-for="Password" class="field-error"></span></div>
+            <div class="form-field"><label asp-for="LicenseCategory"></label><select asp-for="LicenseCategory"><option value="B">B · лек автомобил</option><option value="A">A · мотоциклет</option><option value="C">C · товарен автомобил</option><option value="D">D · автобус</option></select></div>
+            <div class="form-field"><label asp-for="InstructorProfileId"></label><select asp-for="InstructorProfileId"><option value="">Без назначение</option>@foreach (var instructor in instructors) { <option value="@instructor.Id">@instructor.ApplicationUser.FullName</option> }</select></div>
+            <div class="form-actions"><button class="button button-primary" type="submit">Създай профил</button><a class="button button-light" asp-action="Index">Отказ</a></div>
+        </form>
+    </div>
+</section>

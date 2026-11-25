@@ -1,0 +1,25 @@
+@using DriveSchool.Models
+@{
+    ViewData["Title"] = "Запази урок";
+    var slots = ViewBag.Slots as IReadOnlyList<LessonBooking> ?? Array.Empty<LessonBooking>();
+}
+<div class="welcome-row"><div><span class="eyebrow">ИЗБЕРЕТЕ УДОБНО ВРЕМЕ</span><h2>Свободни часове</h2><p>Заявката става активна след потвърждение от инструктора.</p></div></div>
+@if (ViewBag.EnrollmentApproved != true)
+{
+    <div class="notice-strip">Записването за урок ще се активира след одобрение на заявката ви за обучение.</div>
+}
+else if (slots.Count == 0)
+{
+    <div class="empty-state"><span class="empty-icon">▦</span><h2>Няма свободни часове в момента.</h2><p>Проверете отново по-късно или се свържете с офиса на школата.</p><a class="button button-light" asp-controller="Home" asp-action="Contact">Контакти</a></div>
+}
+else
+{
+    <section class="panel"><div class="table-wrap"><table class="data-table"><thead><tr><th>Инструктор</th><th>Дата</th><th>Час</th><th>Автомобил</th><th>Заявка</th></tr></thead><tbody>
+    @foreach (var slot in slots)
+    {
+        <tr><td><strong>@slot.InstructorProfile.ApplicationUser.FullName</strong></td><td>@slot.StartsAt.ToString("dd MMM yyyy")</td><td>@slot.StartsAt.ToString("HH:mm") – @slot.EndsAt.ToString("HH:mm")</td><td>@(slot.Car?.MakeModel ?? "Ще бъде уточнен")</td><td>
+            <form asp-action="RequestLesson" method="post" class="inline-form"><input type="hidden" name="id" value="@slot.Id" /><input class="field-control" type="text" name="note" maxlength="600" placeholder="Бележка (по избор)" aria-label="Бележка към инструктора" /><button class="button button-primary button-small" type="submit">Заяви час</button></form>
+        </td></tr>
+    }
+    </tbody></table></div></section>
+}

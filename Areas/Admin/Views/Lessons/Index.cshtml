@@ -1,0 +1,12 @@
+@model IReadOnlyList<DriveSchool.Models.LessonBooking>
+@{
+    ViewData["Title"] = "Проведени уроци";
+}
+<div class="welcome-row"><div><span class="eyebrow">ИСТОРИЯ НА ОБУЧЕНИЕТО</span><h2>Проведени уроци</h2><p>Резюмета и оценки от инструкторите.</p></div></div>
+<section class="panel"><div class="table-wrap"><table class="data-table"><thead><tr><th>Дата</th><th>Курсист</th><th>Инструктор</th><th>Автомобил</th><th>Резюме</th><th>Оценка</th></tr></thead><tbody>
+@foreach (var item in Model)
+{
+    <tr><td>@item.StartsAt.ToString("dd MMM yyyy, HH:mm")</td><td><strong>@item.StudentProfile?.ApplicationUser.FullName</strong></td><td>@item.InstructorProfile.ApplicationUser.FullName</td><td>@(item.Car?.MakeModel ?? "—")</td><td>@(item.Lesson?.Summary ?? "—")</td><td>@if (item.Lesson?.Evaluation is { } evaluation) { <span class="rating">@(new string('★', evaluation.VehicleControl))</span><br /><small>@evaluation.Comment</small> } else { <span class="muted">Няма оценка</span> }</td></tr>
+}
+@if (Model.Count == 0) { <tr><td colspan="6" class="table-empty">Все още няма проведени уроци.</td></tr> }
+</tbody></table></div></section>

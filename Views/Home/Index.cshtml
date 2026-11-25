@@ -1,0 +1,82 @@
+@using DriveSchool.Models
+@{
+    ViewData["Title"] = "Обучение, което вдъхва увереност";
+    var instructors = ViewBag.Instructors as IReadOnlyList<InstructorProfile> ?? Array.Empty<InstructorProfile>();
+}
+<section class="hero">
+    <div class="hero-content">
+        <div class="hero-kicker"><span class="live-dot"></span> Шофьорски курсове в София</div>
+        <h1>Пътят към увереното шофиране <em>започва тук.</em></h1>
+        <p>Спокойни инструктори, ясна програма и практическо обучение, съобразено с вашето темпо.</p>
+        <div class="hero-actions">
+            <a class="button button-primary button-large" asp-controller="Account" asp-action="Register">Започнете обучението <span>→</span></a>
+            <a class="button button-outline button-large" asp-controller="Home" asp-action="Training">Разгледайте категориите</a>
+        </div>
+        <div class="hero-proof">
+            <span class="card-icon">✓</span>
+            <span><strong>Обучение с личен план</strong><small>обратна връзка след всеки урок</small></span>
+        </div>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+        <div class="hero-road"></div>
+        <div class="hero-glow"></div>
+        <div class="hero-car">
+            <div class="car-window"></div><div class="car-body"></div><div class="car-wheel wheel-left"></div><div class="car-wheel wheel-right"></div>
+            <span class="car-light"></span>
+        </div>
+        <div class="floating-card floating-card-top"><span class="card-icon">✓</span><span><strong>Практика с план</strong><small>Напредък на всяка стъпка</small></span></div>
+        <div class="floating-card floating-card-bottom"><span class="rating-stars">DRIVE SCHOOL</span><strong>Вашето темпо.</strong><small>Нашата подкрепа.</small></div>
+        <div class="hero-number">01 <span> / 03</span></div>
+    </div>
+</section>
+<section class="trust-strip">
+    <div><strong>01</strong><span>личен план за обучение</span></div>
+    <div><strong>02</strong><span>удобно планиране на часове</span></div>
+    <div><strong>03</strong><span>обратна връзка след урок</span></div>
+    <div><strong>04</strong><span>теория и практика заедно</span></div>
+</section>
+<section class="section section-pad">
+    <div class="section-heading">
+        <div><span class="eyebrow">НАШИЯТ ПОДХОД</span><h2>Повече от шофьорски курс.</h2></div>
+        <p>Създаваме спокойна среда за учене и изграждаме навици, които остават за цял живот.</p>
+    </div>
+    <div class="feature-grid">
+        <article class="feature-card"><span class="feature-number">01</span><div class="feature-symbol">◷</div><h3>График според вас</h3><p>Избирате удобен свободен час и получавате потвърждение от своя инструктор.</p><a asp-controller="Home" asp-action="Training">Вижте как работи <span>→</span></a></article>
+        <article class="feature-card feature-card-highlight"><span class="feature-number">02</span><div class="feature-symbol">↗</div><h3>Личен напредък</h3><p>Следим уменията ви и даваме конкретна обратна връзка след всеки урок.</p><a asp-controller="Home" asp-action="About">Нашият метод <span>→</span></a></article>
+        <article class="feature-card"><span class="feature-number">03</span><div class="feature-symbol">◎</div><h3>Безопасността е навик</h3><p>Учите се да предвиждате ситуации, да вземате решения и да се движите уверено.</p><a asp-controller="Home" asp-action="About">Запознайте се с нас <span>→</span></a></article>
+    </div>
+</section>
+<section class="section category-preview">
+    <div class="category-copy"><span class="eyebrow">ОБУЧЕНИЕ ЗА ВСЕКИ ЕТАП</span><h2>Изберете своята категория.</h2><p>От първия урок до увереното представяне на изпит — вървим по пътя заедно.</p><a class="button button-dark" asp-controller="Home" asp-action="Training">Всички категории <span>→</span></a></div>
+    <div class="category-cards">
+        <a class="category-tile category-tile-featured" asp-controller="Home" asp-action="Training"><span class="category-letter">B</span><span class="category-detail"><strong>Лек автомобил</strong><small>Най-предпочитан курс</small></span><span class="category-arrow">↗</span></a>
+        <a class="category-tile" asp-controller="Home" asp-action="Training"><span class="category-letter">A</span><span class="category-detail"><strong>Мотоциклет</strong><small>Свобода на две колела</small></span><span class="category-arrow">↗</span></a>
+        <a class="category-tile" asp-controller="Home" asp-action="Training"><span class="category-letter">C</span><span class="category-detail"><strong>Товарен автомобил</strong><small>Професионална квалификация</small></span><span class="category-arrow">↗</span></a>
+    </div>
+</section>
+<section class="section section-pad instructor-preview">
+    <div class="section-heading">
+        <div><span class="eyebrow">ХОРАТА ЗАД ВОЛАНА</span><h2>Инструктори, които ви разбират.</h2></div>
+        <a class="text-link" asp-controller="Home" asp-action="Instructors">Запознайте се с екипа <span>→</span></a>
+    </div>
+    @if (instructors.Count > 0)
+    {
+        <div class="instructor-grid">
+            @foreach (var instructor in instructors)
+            {
+                <article class="instructor-card">
+                    <div class="instructor-avatar">@instructor.ApplicationUser.FullName.Substring(0, 1)</div>
+                    <div><h3>@instructor.ApplicationUser.FullName</h3><p>@instructor.YearsExperience години опит · Категории @instructor.Categories</p><span>@instructor.Bio</span></div>
+                </article>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="quiet-empty">Профилите на инструкторите ще се покажат тук след свързване на базата данни.</div>
+    }
+</section>
+<section class="cta-band">
+    <div><span class="eyebrow">ГОТОВИ ЛИ СТЕ?</span><h2>Вашето място зад волана ви очаква.</h2><p>Създайте профил и изпратете заявка за обучение.</p></div>
+    <a class="button button-primary button-large" asp-controller="Account" asp-action="Register">Запишете се сега <span>→</span></a>
+</section>

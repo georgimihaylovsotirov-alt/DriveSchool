@@ -1,0 +1,14 @@
+@model IReadOnlyList<DriveSchool.Models.LessonBooking>
+@{
+    ViewData["Title"] = "Уроци и оценки";
+}
+<div class="welcome-row"><div><span class="eyebrow">ОБУЧЕНИЕ И ОБРАТНА ВРЪЗКА</span><h2>Уроци и оценки</h2><p>Записвайте резултата след всеки урок и следете историята на курсистите.</p></div></div>
+<section class="panel"><div class="table-wrap"><table class="data-table"><thead><tr><th>Дата</th><th>Курсист</th><th>Автомобил</th><th>Резюме / оценка</th><th>Действие</th></tr></thead><tbody>
+@foreach (var item in Model)
+{
+    <tr><td>@item.StartsAt.ToString("dd MMM yyyy, HH:mm")</td><td><strong>@item.StudentProfile?.ApplicationUser.FullName</strong></td><td>@(item.Car?.MakeModel ?? "—")</td><td>@(item.Lesson?.Summary ?? "Предстои провеждане")<br />@if (item.Lesson?.Evaluation is { } eval) { <span class="rating">@(new string('★', eval.VehicleControl))</span><small> · @eval.Comment</small> }</td><td>
+        @if (item.Status == DriveSchool.Models.BookingStatus.Confirmed) { <a class="table-link" asp-action="Complete" asp-route-id="@item.Id">Завърши урока</a> } else { <span class="status status-completed">Проведен</span> }
+    </td></tr>
+}
+@if (Model.Count == 0) { <tr><td colspan="5" class="table-empty">Няма уроци за преглед.</td></tr> }
+</tbody></table></div></section>

@@ -1,0 +1,130 @@
+@model DriveSchool.ViewModels.RegisterViewModel
+@{
+    ViewData["Title"] = "Регистрация";
+}
+<section class="auth-wrap">
+    <div class="auth-aside">
+        <span class="eyebrow">ПЪРВАТА СТЪПКА</span>
+        <h1>Започнете уверено.</h1>
+        <p>Създайте профил като курсист или кандидатствайте за инструктор в DriveSchool.</p>
+        <div class="auth-aside-note"><span>01</span> Заявките за инструктор се преглеждат от администратор.</div>
+        <div class="auth-aside-note"><span>02</span> Достъпът до инструкторското табло се активира след одобрение.</div>
+    </div>
+
+    <form class="form-card auth-card" asp-action="Register" method="post" enctype="multipart/form-data">
+        <span class="eyebrow">СЪЗДАВАНЕ НА ПРОФИЛ</span>
+        <h2>Добре дошли в DriveSchool.</h2>
+        <p class="muted">Изберете какъв профил искате да създадете.</p>
+
+        <div asp-validation-summary="ModelOnly" class="field-error"></div>
+
+        <label asp-for="AccountType"></label>
+        <select asp-for="AccountType" id="accountType">
+            <option value="Student">Курсист</option>
+            <option value="Instructor">Инструктор</option>
+        </select>
+        <span asp-validation-for="AccountType" class="field-error"></span>
+
+        <label asp-for="FullName"></label>
+        <input asp-for="FullName" autocomplete="name" />
+        <span asp-validation-for="FullName" class="field-error"></span>
+
+        <label asp-for="Email"></label>
+        <input asp-for="Email" autocomplete="email" />
+        <span asp-validation-for="Email" class="field-error"></span>
+
+        <div id="studentFields">
+            <label asp-for="LicenseCategory"></label>
+            <select asp-for="LicenseCategory">
+                <option value="B">Категория B · лек автомобил</option>
+                <option value="A">Категория A · мотоциклет</option>
+                <option value="C">Категория C · товарен автомобил</option>
+                <option value="D">Категория D · автобус</option>
+            </select>
+            <span asp-validation-for="LicenseCategory" class="field-error"></span>
+        </div>
+
+        <div id="instructorFields" hidden>
+            <hr />
+            <h3>Кандидатстване за инструктор</h3>
+            <p class="muted">Всички полета в тази секция са задължителни. След изпращане администраторът ще прегледа заявката и CV-то ви.</p>
+
+            <label asp-for="PhoneNumber"></label>
+            <input asp-for="PhoneNumber" autocomplete="tel" />
+            <span asp-validation-for="PhoneNumber" class="field-error"></span>
+
+            <label asp-for="Bio"></label>
+            <textarea asp-for="Bio" rows="4" placeholder="Опишете квалификацията, опита и професионалната си подготовка."></textarea>
+            <span asp-validation-for="Bio" class="field-error"></span>
+
+            <label asp-for="YearsExperience"></label>
+            <input asp-for="YearsExperience" type="number" min="0" max="60" />
+            <span asp-validation-for="YearsExperience" class="field-error"></span>
+
+            <label asp-for="Categories"></label>
+            <input asp-for="Categories" placeholder="Например: B или B, A" />
+            <small class="form-help">Въведете категориите, по които имате право да обучавате: A, B, C, D. Разделяйте ги със запетая.</small>
+            <span asp-validation-for="Categories" class="field-error"></span>
+
+            <h3>Обучителен автомобил</h3>
+            <label asp-for="TrainingCarMakeModel"></label>
+            <input asp-for="TrainingCarMakeModel" placeholder="Например: Volkswagen Golf 7" />
+            <span asp-validation-for="TrainingCarMakeModel" class="field-error"></span>
+
+            <label asp-for="TrainingCarRegistrationNumber"></label>
+            <input asp-for="TrainingCarRegistrationNumber" placeholder="Например: CB 1234 AB" />
+            <span asp-validation-for="TrainingCarRegistrationNumber" class="field-error"></span>
+
+            <label asp-for="TrainingCarYear"></label>
+            <input asp-for="TrainingCarYear" type="number" min="1990" max="2100" />
+            <span asp-validation-for="TrainingCarYear" class="field-error"></span>
+
+            <label asp-for="TrainingCarCategory"></label>
+            <select asp-for="TrainingCarCategory">
+                <option value="B">Категория B</option>
+                <option value="A">Категория A</option>
+                <option value="C">Категория C</option>
+                <option value="D">Категория D</option>
+            </select>
+            <span asp-validation-for="TrainingCarCategory" class="field-error"></span>
+
+            <label asp-for="CvFile"></label>
+            <input asp-for="CvFile" type="file" accept=".pdf,.doc,.docx" />
+            <small class="form-help">Приемат се PDF, DOC и DOCX файлове до 5 MB.</small>
+            <span asp-validation-for="CvFile" class="field-error"></span>
+        </div>
+
+        <hr />
+        <label asp-for="Password"></label>
+        <input asp-for="Password" autocomplete="new-password" />
+        <span asp-validation-for="Password" class="field-error"></span>
+
+        <label asp-for="ConfirmPassword"></label>
+        <input asp-for="ConfirmPassword" autocomplete="new-password" />
+        <span asp-validation-for="ConfirmPassword" class="field-error"></span>
+
+        <small class="form-help">Паролата трябва да е поне 10 знака и да включва главна буква, цифра и символ.</small>
+        <button class="button button-primary button-full" type="submit">Изпрати регистрацията <span>→</span></button>
+        <p class="auth-switch">Вече имате профил? <a asp-action="Login">Влезте</a></p>
+    </form>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        (() => {
+            const accountType = document.getElementById('accountType');
+            const instructorFields = document.getElementById('instructorFields');
+            const studentFields = document.getElementById('studentFields');
+
+            function updateRegistrationFields() {
+                const isInstructor = accountType.value === 'Instructor';
+                instructorFields.hidden = !isInstructor;
+                studentFields.hidden = isInstructor;
+            }
+
+            accountType.addEventListener('change', updateRegistrationFields);
+            updateRegistrationFields();
+        })();
+    </script>
+}

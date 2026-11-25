@@ -1,0 +1,17 @@
+@model DriveSchool.ViewModels.InstructorCreateViewModel
+@{
+    ViewData["Title"] = "Нов инструктор";
+}
+<section class="panel"><header class="panel-header"><div><h2>Създаване на инструкторски профил</h2><p>Инструкторът ще получи достъп до своя график и назначените курсисти.</p></div></header><div class="panel-body">
+<form asp-action="Create" method="post" class="form-stack">
+    <div class="content-grid">
+        <div class="form-field"><label asp-for="FullName"></label><input asp-for="FullName" /><span asp-validation-for="FullName" class="field-error"></span></div>
+        <div class="form-field"><label asp-for="Email"></label><input asp-for="Email" /><span asp-validation-for="Email" class="field-error"></span></div>
+        <div class="form-field"><label asp-for="Password"></label><input asp-for="Password" /><span asp-validation-for="Password" class="field-error"></span></div>
+        <div class="form-field"><label asp-for="YearsExperience"></label><input asp-for="YearsExperience" type="number" min="0" max="60" /><span asp-validation-for="YearsExperience" class="field-error"></span></div>
+        <div class="form-field"><label asp-for="Categories"></label><input asp-for="Categories" placeholder="B, A" /><span asp-validation-for="Categories" class="field-error"></span></div>
+        <label class="checkbox-control"><input asp-for="IsActive" /> Активен профил</label>
+    </div>
+    <div class="form-field"><label asp-for="Bio"></label><textarea asp-for="Bio" rows="4"></textarea><span asp-validation-for="Bio" class="field-error"></span></div>
+    <div class="form-actions"><button class="button button-primary" type="submit">Създай профил</button><a class="button button-light" asp-action="Index">Отказ</a></div>
+</form></div></section>
